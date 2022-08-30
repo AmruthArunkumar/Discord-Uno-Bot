@@ -1,8 +1,10 @@
 from card import Card
 from player import Player
 from random import shuffle as sh
+from pile import Pile
+import game
 
-maxPeople = 10
+maxPeople = 6
 
 class Deck:
     def __init__(self):
@@ -16,6 +18,7 @@ class Deck:
         cards += self.addColored("red")
         cards += self.addColored("blue")
         cards += self.addWilds()
+        cards = cards + cards + cards
         return cards
 
     def printAll(self):
@@ -44,5 +47,34 @@ class Deck:
                 wildCards.append(Card("black", None, type, isWild = True))
         return wildCards
 
+    def print(self, sprites):
+        handString = ""
+        index = 0
+        for card in self.cards:
+            print(card.color, card.power)
+            handString += card.toString(sprites)
+            if index != (len(self.cards) - 1):
+                handString += "\n"
+            index += 1
+        return handString        
+
     def distribute(self, people):
-        pass
+        playerList = []
+        i = 0
+        for person in people:
+            hand = self.cards[:7]
+            del self.cards[:7]
+            playerList.append(Player(str(person), i, hand))
+            i += 1
+        isNumber = False
+        index = -1
+        while not isNumber:
+            index += 1
+            topCard = self.cards[index]
+            isNumber = topCard.isNumber
+        del self.cards[index]
+        self.initPile(topCard)
+        return playerList
+    
+    def initPile(self, topCard):
+        game.pile = Pile(topCard)
