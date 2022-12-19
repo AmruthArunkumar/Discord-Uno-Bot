@@ -1,6 +1,3 @@
-from turtle import color
-
-
 class Card:
     def __init__(self, color, number, power, isNumber = False, isAction = False, isWild = False):
         self.color = color
